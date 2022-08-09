@@ -1,4 +1,4 @@
-# CodeGen-Fine-Tuning
+# CodeGen fine tuning on a local server
 
 ## This is a step by step process for fine-tuning CodeGen language models on specific programming languages uisng huggingface transformers and deepspeed
 
