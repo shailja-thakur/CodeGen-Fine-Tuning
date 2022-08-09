@@ -33,16 +33,9 @@ A detailed description of the models isas follows:
 
 
 
-### Following is a detailed set of instruction for replicating the fine-tuning on an HPC:
+### Following is a detailed set of instruction for replicating the CodeGen fine-tuning on a local server:
 
-```
-Singularity container: 20.04 with >= 50GB RAM
-Overlay image: 
-```
-
-However, the setup can also be replicated on a machine with ubuntu 20.04 and RAM >= 50GB
-
-
+The following steps have been tested on an HPC with a sungularity container with Ubuntu20.04 and 50GB RAM. However, the setup can also be replicated on a machine with ubuntu 20.04.
 
 #### Prepare training corpus. 
 
