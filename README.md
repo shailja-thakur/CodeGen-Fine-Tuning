@@ -92,7 +92,7 @@ pip install deepspeed
 + At this point, you are ready to run the fine-tuning. The following command runs fine-tuning script `run_clm.py` with using deepspeed. In this case,, deepspeed request to use two gpus on one node. You can change the save_steps, model name, number of epochs to train, input token length, and otehr parametrs. The following configuration worked in my case.
 
 ```
-deepspeed --num_gpus 2 --num_nodes 1 run_clm.py --model_name_or_path=Salesforce/codegen-6B-multi --save_steps=100 --per_device_train_batch_size=1 --learning_rate 2e-5 --num_train_epochs 1 --output_dir=CodeGen/codegen-6B-verilog-3-epochs --report_to 'wandb' --dataset_name code_segments_verilog --tokenizer_name Salesforce/codegen-16B-multi --block_size 1024 --gradient_accumulation_steps 32 --do_train --do_eval --fp16 --overwrite_output_dir --deepspeed ds_config_AdamW.json"
+deepspeed --num_gpus 2 --num_nodes 1 run_clm.py --model_name_or_path=Salesforce/codegen-6B-multi --save_steps=100 --per_device_train_batch_size=1 --learning_rate 2e-5 --num_train_epochs 1 --output_dir=CodeGen/codegen-6B-verilog-3-epochs --report_to 'wandb' --dataset_name code_segments_verilog --tokenizer_name Salesforce/codegen-16B-multi --block_size 1024 --gradient_accumulation_steps 32 --do_train --do_eval --fp16 --overwrite_output_dir --deepspeed ds_config.json"
 ```
 
 To run the fine-tuning on HPC, I created a slurm script (`run-codegen-finetune.SBATCH`) which runs the above command as a job in a singulatrity container in a conda environment. 
