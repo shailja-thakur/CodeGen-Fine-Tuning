@@ -112,9 +112,9 @@ To run the fine-tuning on HPC, I created a slurm script (run-codegen.SBATCH) whi
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=200GB
 #SBATCH --gres=gpu:rtx8000:2
-#SBATCH --job-name=codegenV
+#SBATCH --job-name=codegen
 #SBATCH --time=140:00:00
-#SBATCH --mail-user=st4920@nyu.edu
+#SBATCH --mail-user=REPLACE_WITH_EMAIL_ID_WITHOUT_QUOTE
 #SBATCH --mail-type=END
 
 module purge
