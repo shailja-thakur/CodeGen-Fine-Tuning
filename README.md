@@ -2,7 +2,7 @@
 
 ## This is a step by step process for fine-tuning CodeGen language models on specific programming languages uisng huggingface transformers and deepspeed
 
-CodeGen is a suite of code based language models by SalesForce. Model sizes vary with respect to their training corpus, and model parameters. Models are named as per the convention codegen-{model-size}-{data}.
+CodeGen is a suite of code based language models by SalesForce (https://github.com/salesforce/CodeGen/blob/main/README.md). Model sizes vary with respect to their training corpus, and model parameters. Models are named as per the convention codegen-{model-size}-{data}.
 
 `model-size` has 4 options: `350M`, `2B`, `6B`, `16B`, which represent the number of parameters in each model.
 
