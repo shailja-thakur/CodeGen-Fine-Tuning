@@ -1,6 +1,6 @@
 # CodeGen fine tuning with deepspeed on a local server
 
-## This is a step by step process for fine-tuning CodeGen language models on specific programming languages uisng huggingface transformers and deepspeed
+## This is a step by step process for fine-tuning CodeGen on specific programming languages using huggingface transformers and deepspeed
 
 CodeGen is a suite of code based language models by SalesForce (https://github.com/salesforce/CodeGen/blob/main/README.md). Model sizes vary with respect to their training corpus, and model parameters. Models are named as per the convention codegen-{model-size}-{data}.
 
