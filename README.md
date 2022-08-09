@@ -35,7 +35,7 @@ A detailed description of the models isas follows:
 
 ### Following is a detailed set of instruction for replicating the CodeGen fine-tuning on a local server:
 
-The following steps have been tested on an HPC with a sungularity container with Ubuntu20.04 and 50GB RAM. However, the setup can also be replicated on a machine with ubuntu 20.04.
+The following steps have been tested on an HPC with a sungularity container with Ubuntu20.04 and 50GB RAM. However, the setup can also be replicated on a machine with ubuntu 20.04. 
 
 #### Prepare training corpus. 
 
@@ -68,7 +68,7 @@ then, activate the environment
 conda activate anyname
 ```
 
-And later, install the following software libraries inside the environment (`conda activate name_of_the_conda_env`)
+And later, install the following software libraries inside the environment (`conda activate name_of_the_conda_env`). Please note that, it is assumed the pre-requisited are installed (pip, sklearn,pandas,numpy,scipy, and other packeages for doing basic data science).
 
 + Clone the transformers repo from GitHub
 ```git clone https://github.com/huggingface/transformers```
