@@ -1,4 +1,4 @@
-# CodeGen fine tuning with deepspeed on a local server
+# CodeGen fine tuning with HuggingFace + Deepspeed
 
 ## This is a step by step process for fine-tuning CodeGen on specific programming languages using huggingface transformers and deepspeed
 
