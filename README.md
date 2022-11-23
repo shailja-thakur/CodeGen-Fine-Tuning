@@ -1,6 +1,6 @@
-# CodeGen-Fine-Tuning
+# CodeGen fine tuning with HuggingFace + Deepspeed
 
-## This is a step by step process for fine-tuning CodeGen language models on specific programming languages uisng huggingface transformers and deepspeed
+## This is a step by step process for fine-tuning CodeGen on specific programming languages using huggingface transformers and deepspeed
 
 CodeGen is a suite of code based language models by SalesForce (https://github.com/salesforce/CodeGen/blob/main/README.md). Model sizes vary with respect to their training corpus, and model parameters. Models are named as per the convention codegen-{model-size}-{data}.
 
@@ -33,16 +33,9 @@ A detailed description of the models isas follows:
 
 
 
-### Following is a detailed set of instruction for replicating the fine-tuning on an HPC:
+### Following is a detailed set of instruction for replicating the CodeGen fine-tuning on a local server:
 
-```
-Singularity container: 20.04 with >= 50GB RAM
-Overlay image: 
-```
-
-However, the setup can also be replicated on a machine with ubuntu 20.04 and RAM >= 50GB
-
-
+The following steps have been tested on an HPC with a sungularity container with Ubuntu20.04 and 50GB RAM. However, the setup can also be replicated on a machine with ubuntu 20.04. 
 
 #### Prepare training corpus. 
 
@@ -75,7 +68,7 @@ then, activate the environment
 conda activate anyname
 ```
 
-And later, install the following software libraries inside the environment (`conda activate name_of_the_conda_env`)
+And later, install the following software libraries inside the environment (`conda activate name_of_the_conda_env`). Please note that, it is assumed the pre-requisited are installed (pip, sklearn,pandas,numpy,scipy, and other packeages for doing basic data science).
 
 + Clone the transformers repo from GitHub
 ```git clone https://github.com/huggingface/transformers```
@@ -96,38 +89,16 @@ pip install deepspeed
 + Put the json file we prepared in teh first step in a folder on the path as above (../transformers/examples/pytorch/language-modeling/), and the name of the folder should be the same as the name of your json file without extension.
 + At this point you are ready to run fine-tuning if everything is good — it is possible that you run into some package conflicts and other issues, which you will have to resolve along the way, you can also let me know, perhaps I must have already encountered those issues
 
-+ At this point, you are ready to run the fine-tuning. The following command runs fine-tuning script `run_clm.py` with using deepspeed. In this case,, deepspeed request to use two gpus on one node. You can change the save_steps, model name, number of epochs to train, input token length, and otehr parametrs. The following configuration worked in my case.
++ At this point, you are ready to run the fine-tuning. The following command runs fine-tuning script `run_clm.py` using deepspeed (https://huggingface.co/docs/transformers/main_classes/deepspeed). In this case, deepspeed request two gpus on a node. You can play around with the `run_clm.py` options and deepspeed configuration (`ds_config.json`) and change the save_steps, model name, number of epochs to train, input token length, and otehr parametrs. The following configuration of `run_clm` has been tested to work on teh HPC wit ubuntu 20.04.
 
 ```
-deepspeed --num_gpus 2 --num_nodes 1 run_clm.py --model_name_or_path=Salesforce/codegen-6B-multi --save_steps=100 --per_device_train_batch_size=1 --learning_rate 2e-5 --num_train_epochs 1 --output_dir=CodeGen/codegen-6B-verilog-3-epochs --report_to 'wandb' --dataset_name code_segments_verilog --tokenizer_name Salesforce/codegen-16B-multi --block_size 1024 --gradient_accumulation_steps 32 --do_train --do_eval --fp16 --overwrite_output_dir --deepspeed ds_config_AdamW.json"
+deepspeed --num_gpus 2 --num_nodes 1 run_clm.py --model_name_or_path=Salesforce/codegen-6B-multi --save_steps=100 --per_device_train_batch_size=1 --learning_rate 2e-5 --num_train_epochs 1 --output_dir=CodeGen/codegen-6B-verilog-3-epochs --report_to 'wandb' --dataset_name code_segments_verilog --tokenizer_name Salesforce/codegen-16B-multi --block_size 1024 --gradient_accumulation_steps 32 --do_train --do_eval --fp16 --overwrite_output_dir --deepspeed ds_config.json"
 ```
 
-To run the fine-tuning on HPC, I created a slurm script (run-codegen.SBATCH) which runs the above command as a job in a singulatrity container in a conda environment. 
-
-``` bash
-#!/bin/bash
-  
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=2
-#SBATCH --mem=200GB
-#SBATCH --gres=gpu:rtx8000:2
-#SBATCH --job-name=codegen
-#SBATCH --time=140:00:00
-#SBATCH --mail-user=REPLACE_WITH_EMAIL_ID_WITHOUT_QUOTE
-#SBATCH --mail-type=END
-
-module purge
-
-singularity exec --nv \
-      --overlay overlay_image.ext3:ro \
-      singularity_container.sif \
-      /bin/bash -c "source /ext3/env.sh; conda activate name_of_the_conda_env; deepspeed --num_gpus 2 --num_nodes 1 run_clm.py --model_name_or_path=Salesforce/codegen-6B-multi --save_steps=100 --per_device_train_batch_size=1 --learning_rate 2e-5 --num_train_epochs 1 --output_dir=CodeGen/codegen-6B-verilog-3-epochs --report_to 'wandb' --dataset_name code_segments --tokenizer_name Salesforce/codegen-16B-multi --block_size 1024 --gradient_accumulation_steps 32 --do_train --do_eval --fp16 --overwrite_output_dir --deepspeed ds_config.json" > cat log_file.txt
-```
-
-+ The above command also uses deepspeed configurations in a json file. I am including the ds_config.json.
+To run the fine-tuning as a job on HPC, I created a slurm script (`run-codegen-finetune.SBATCH`) which runs the above command in a slurm script with conda environment within singularity container. 
 
 
++ The deepspeed configurations is included in the ds_config.json file
 + One more step, if you look at the arguments of the `run_clm.py` script above, you will notice that there is a term “wandb”. It is similar to `tensorboard`. `wandb` is a [web portal] (https://wandb.ai/) that is integrated with the transformers, and helps visualize the system usage, logs, and other details while the fine-tuning progress.
 + Make sure that you install `wandb` as `pip install wandb` and register on their portal 
 + Next, log in to wandb in the terminal within your singulartity container (or, in the terminal on your machine) before executing the deepspeed command above (or, running the slurm script) like,
