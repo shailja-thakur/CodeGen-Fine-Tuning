@@ -60,7 +60,7 @@ Note, in this case, the for loop iterates a pandas dataframe `df_code` with a co
 
 #### Prepare the environment on your machine 
 
-I recommend creating a conda environment for fine-tuning. I created a conda environment inside the singularity container, however, if you are not using container, you may create a conda environment direclty on your machine,
+I recommend the followinf for fine-tuning. I created a conda environment inside the singularity container, however, if you are not using container, you may create a conda environment direclty on your machine,
 
 ```
 conda create --name anyname python=3.X
@@ -115,4 +115,13 @@ It is possible to remove the wandb option from the fine-tuning altogether by rem
 + If you are running the fine-tuning on HPC, at first, I would suggest you request only one GPU on one node with lesser memory, which will be allocated easily, and you can resolve any error that pops up along the way.
 + If everything is installed and compatible, the fine-tuning should execute and you will be able to track the progress on wandb portal and from the log file on your machine.
 
-## Next, how to evaluate the fine-tuned model coming soon .. 
+#### Installing packages uisng requirement.txt
+
+You can also install the requirements as follows, and take care of the conflicting libraries along the way
+
+```
+python3 -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+```
+
