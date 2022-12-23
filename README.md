@@ -115,7 +115,7 @@ It is possible to remove the wandb option from the fine-tuning altogether by rem
 + If you are running the fine-tuning on HPC, at first, I would suggest you request only one GPU on one node with lesser memory, which will be allocated easily, and you can resolve any error that pops up along the way.
 + If everything is installed and compatible, the fine-tuning should execute and you will be able to track the progress on wandb portal and from the log file on your machine.
 
-#### Installing packages uisng requirement.txt
+#### Installing packages using requirement.txt
 
 You can also install the requirements as follows, and take care of the conflicting libraries along the way
 
