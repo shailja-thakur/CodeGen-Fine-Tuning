@@ -125,3 +125,7 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=shailja-thakur/CodeGen-Fine-Tuning&type=Date)](https://star-history.com/#shailja-thakur/CodeGen-Fine-Tuning&Date)
+
